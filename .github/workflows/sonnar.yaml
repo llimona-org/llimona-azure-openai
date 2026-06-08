@@ -1,0 +1,53 @@
+# This is a basic workflow to help you get started with Actions
+
+name: SonarCloud analysis
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the develop branch
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - main
+      - release/*
+
+permissions:
+  contents: read
+  pull-requests: write
+  
+concurrency:
+  group: push-sonar-${{ github.base_ref }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+  # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
+jobs:
+  validate:
+    name: Run tests and analyze with SonarCloud
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.14"]
+      fail-fast: true
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          
+      - uses: ./.github/actions/setup-repo
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install development requirements
+        run: |
+          uv sync --all-packages --all-groups
+
+      - name: Run checks
+        run: poe test
+
+      - name: Analyze with SonarCloud
+        uses: SonarSource/sonarqube-scan-action@v7.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
