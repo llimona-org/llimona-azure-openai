@@ -33,9 +33,7 @@ class AzureOpenAIAddonTests:
         assert instance.display_name == 'Azure OpenAI Addon'
         assert instance.description == 'An addon to support Azure OpenAI as a provider in Llimona.'
 
-    def test_register_providers_registers_provider_under_azure_openai_type(
-        self, registry: ComponentRegistry
-    ) -> None:
+    def test_register_providers_registers_provider_under_azure_openai_type(self, registry: ComponentRegistry) -> None:
         AzureOpenAIAddon().register_providers(registry)
 
         # 'azure_openai' is the default value of ``ProviderDesc.type``, which the
