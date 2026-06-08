@@ -4,20 +4,15 @@ version = "0.1.0"
 description = "Llimona addon providing an Azure OpenAI provider integration."
 readme = "README.md"
 authors = [
-    { name = "Alfred", email = "alfred.santacatalinagea@telefonica.com" }
+    { name = "Alfred", email = "alfred.santacatalinagea@telefonica.com" },
 ]
 requires-python = ">=3.14"
-dependencies = [
-    "llimona",
-    "openai>=2.41.0",
-]
+dependencies = ["llimona", "openai>=2.41.0"]
 
 [build-system]
 requires = ["uv_build>=0.9.26,<0.12.0"]
 build-backend = "uv_build"
 
-[tool.uv.sources]
-llimona = { path = "../llimona/" } 
 
 [dependency-groups]
 dev = [
@@ -99,15 +94,12 @@ exclude_also = [
     "if TYPE_CHECKING",
 
     # Don't complain overloads, they aren't run:
-    "@overload"
+    "@overload",
 ]
 
 [tool.coverage.paths]
 source = ["src/"]
-omit = [
-    "src/**/cli",
-    "tests",
-]
+omit = ["src/**/cli", "tests"]
 
 
 [tool.poe.tasks]
@@ -136,36 +128,22 @@ empty_glob = "null"
 
 [tool.poe.tasks.validate]
 help = "Execute all validations: typecheck, lint, and test"
-sequence = [
-    "typecheck",
-    "format:check",
-    "lint",
-    "test"
-]
+sequence = ["typecheck", "format:check", "lint", "test"]
 
 [tool.poe.tasks.prebuild]
 help = "Pre-build checks: typecheck and lint"
-sequence = [
-    "typecheck", 
-    "lint"
-]
+sequence = ["typecheck", "lint"]
 
 [tool.poe.tasks."clean:all"]
 help = "Complete cleanup: cache, coverage, and temporary files"
-sequence = [
-    "clean",
-    { cmd = """rm -rf dist
+sequence = ["clean", { cmd = """rm -rf dist
                       build
                       .coverage
                       coverage.xml
                       pytest.xml
                       **/.*_cache
-            """},
-]
+            """ }]
 
 [tool.poe.tasks.fix]
 help = "Fix linting and formatting issues, then run tests"
-sequence = [
-    "format",
-    "lint:fix",
-]
+sequence = ["format", "lint:fix"]
