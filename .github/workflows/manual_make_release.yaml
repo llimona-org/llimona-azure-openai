@@ -25,7 +25,7 @@ jobs:
       id-token: write
     environment:
         name: pypi-${{ inputs.level == 'production' && 'manual' || 'dev' }}
-        url: https://pypi.org/project/llimona/  
+        url: https://pypi.org/project/llimona-azure-openai/  
     outputs:
       version: ${{ steps.make_release.outputs.version }}
       base-release-version: ${{ steps.make_release.outputs.base-release-version }}
